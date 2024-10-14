@@ -1,6 +1,7 @@
 import express from 'express';
 import { CommonRoutes } from "./common.routes";
-import userModel from '../models/user.model';
+import userController from '../controllers/user.controller';
+import { createUserValidation, updateValidation } from '../middlewares/user.middleware';
 
 export class UserRoutes extends CommonRoutes{
     constructor(app: express.Application) {
@@ -8,19 +9,17 @@ export class UserRoutes extends CommonRoutes{
     }
 
     generateRoutes() {
-        this.app.route("/users").get(async (req, res) => {
-            const users = await userModel.User.find({});
-            res.json({data: users})
-        })
-
-        this.app.route("/users").post(async (req, res) => {
-            console.log({body: req.body})
-            /*const users = await userModel.User.create({
-
-            })*/
-            res.json({data: req.body})
-        })
-
+        this.app.route("/users").get(userController.getAll)
+        this.app.route("/users/:id").get(userController.getById)
+        this.app.route("/users").post(
+            createUserValidation,
+            userController.create
+        )
+        this.app.route("/users/:id").delete(userController.delete)
+        this.app.route("/users/:id").patch(
+            updateValidation,
+            userController.update
+        )
         return this.app;
     }
 }

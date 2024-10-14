@@ -1,4 +1,5 @@
 import mongoose, {ConnectOptions} from "mongoose";
+import mongoosePaginate from 'mongoose-paginate-v2'
 
 class MongoService {
     private options: ConnectOptions = {
@@ -10,6 +11,7 @@ class MongoService {
     }
 
     getMongoose() {
+        mongoose.plugin(mongoosePaginate)
         return mongoose;
     }
     connect = () => {
