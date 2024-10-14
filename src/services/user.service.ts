@@ -1,6 +1,8 @@
 import { CreateUserDto, UpdateUserDto } from "../dto/user.dto";
 import userModel, { UserDoc } from "../models/user.model";
 import { PaginateOptions, PaginateResult } from "mongoose";
+import { hashValue } from "../utils/crypt.util";
+
 
 class UserService {
     
@@ -22,8 +24,11 @@ class UserService {
     }
     async create(body: CreateUserDto): Promise<UserDoc> {
         const {name, email, password} = body;
+
+        const hashedPassword =  await hashValue(password)
+
         const user = new userModel.User({
-            name, email, password
+            name, email, password: hashedPassword
         })
         const newUser = await user.save();
 
@@ -55,6 +60,15 @@ class UserService {
             }
         } catch(err) {
             return false;
+        }
+    }
+
+    async getUserByEmail(email: string): Promise<UserDoc | null> {
+        try {
+            const user = await userModel.User.findOne({email})
+            return user;
+        } catch(err) {
+            return null;
         }
     }
 

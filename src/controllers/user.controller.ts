@@ -8,9 +8,9 @@ export interface Query {
 
 class UserController {
     
-    async getAll(req: express.Request<{}, {}, {}, Query>, res: express.Response) {
+    async getAll(req: express.Request, res: express.Response) {
         const {page, limit} = req.query;
-        const users = await userService.getAll(page, limit);
+        const users = await userService.getAll(parseInt(page as string || ''), parseInt(limit as string || ''));
         res.json( users)
     }
     async getById(req: express.Request, res: express.Response): Promise<void> {

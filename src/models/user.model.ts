@@ -19,6 +19,14 @@ export class UpdateUserValidation {
     name!: string
 }
 
+export class LoginUserValidation {
+    @IsEmail({}, {message: "Debes ingresar un email válido"})
+    email!: string;
+
+    @IsNotEmpty({message: "La contraseña no debe estar vacía"})
+    password!: string;
+}
+
 
   
 export interface UserDoc extends mongoose.Document {

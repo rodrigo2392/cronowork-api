@@ -16,7 +16,6 @@ class MongoService {
     }
     connect = () => {
         console.log("Connecting to the DB...")
-        console.log({uri:process.env.MONGO_URI})
         mongoose.connect(process.env.MONGO_URI ?? "", this.options).then(() => {
             console.log("MongoDB is connected.")
         })

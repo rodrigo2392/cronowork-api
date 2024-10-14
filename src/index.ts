@@ -4,6 +4,7 @@ import cors from 'cors';
 import * as bodyparser from 'body-parser';
 dotenv.config();
 import { UserRoutes } from './routes/user.routes';
+import { AuthRoutes } from './routes/auth.routes';
 import { CommonRoutes } from './routes/common.routes';
 const app = express()
 
@@ -14,6 +15,7 @@ const port = process.env.PORT
 const routes: Array<CommonRoutes> = [];
 
 routes.push(new UserRoutes(app));
+routes.push(new AuthRoutes(app));
 
 app.get('/', (req, res) => {
   res.json({message: "API CRONOWORK"})
