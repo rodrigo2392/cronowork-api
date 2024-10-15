@@ -1,0 +1,22 @@
+on: push
+name: deploy
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy NodeJS app
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{secrets.SSH_HOST}} # Private or public key of the server
+          username: ${{ secrets.SSH_USERNAME }} # User of the server you want to ssh into
+          key: ${{ secrets.SSH_KEY }}
+     
+          script: |
+            pm2 stop index
+            cd /var/www/cronowork-api
+            git reset --hard
+            git pull origin master
+            npm ci
+            npm run buid
+            pm2 start index
+
