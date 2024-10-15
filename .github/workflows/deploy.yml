@@ -12,6 +12,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
      
           script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             pm2 stop index
             cd /var/www/cronowork-api
             git reset --hard
