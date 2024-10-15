@@ -19,6 +19,6 @@ jobs:
             git reset --hard
             git pull origin master
             npm ci
-            npm run buid
+            npm run build
             pm2 start index
 
