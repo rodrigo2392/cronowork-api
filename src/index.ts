@@ -18,7 +18,7 @@ routes.push(new UserRoutes(app));
 routes.push(new AuthRoutes(app));
 
 app.get('/', (req, res) => {
-  res.json({message: "API CRONOWORK V1.0"})
+  res.json({message: "API CRONOWORK V1.1"})
 })
 app.post('/', (req, res) => {
     res.json({message: "esta es una ruta post"})
