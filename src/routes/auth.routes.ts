@@ -9,10 +9,14 @@ export class AuthRoutes extends CommonRoutes{
     }
 
     generateRoutes() {
-        this.app.route("/login").post(
+        const router = express.Router();
+
+        router.route("/login").post(
             loginValidation,
             authController.login
         )
+
+        this.app.use("/auth", router)
         return this.app;
     }
 }

@@ -10,19 +10,23 @@ export class UserRoutes extends CommonRoutes{
     }
 
     generateRoutes() {
-        this.app.route("/users").get(validateToken, userController.getAll)
-        this.app.route("/users/:id").get(validateToken, userController.getById)
-        this.app.route("/users").post(
+        const router = express.Router();
+
+
+        router.route("/").get(validateToken, userController.getAll)
+        router.route("/:id").get(validateToken, userController.getById)
+        router.route("/").post(
             validateToken,
             createUserValidation,
             userController.create
         )
-        this.app.route("/users/:id").delete(validateToken,userController.delete)
-        this.app.route("/users/:id").patch(
+        router.route("/:id").delete(validateToken,userController.delete)
+        router.route("/:id").patch(
             validateToken,
             updateValidation,
             userController.update
         )
+        this.app.use("/users", router)
         return this.app;
     }
 }
