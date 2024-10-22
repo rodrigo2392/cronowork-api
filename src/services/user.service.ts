@@ -2,6 +2,7 @@ import { CreateUserDto, UpdateUserDto } from "../dto/user.dto";
 import userModel, { UserDoc } from "../models/user.model";
 import { PaginateOptions, PaginateResult } from "mongoose";
 import { hashValue } from "../utils/crypt.util";
+import {ERRORS_M} from '../dto/error.dto'
 
 
 class UserService {
@@ -18,12 +19,21 @@ class UserService {
         const users = await userModel.User.paginate({}, options);
         return users;
     }
-    async getById(id: string): Promise<UserDoc | null> {
+    async getById(id: string): Promise<UserDoc> {
         const user = await userModel.User.findById(id);
+        if(!user) {
+            throw ERRORS_M.NOT_FOUND;
+        }
         return user;
     }
     async create(body: CreateUserDto): Promise<UserDoc> {
         const {name, email, password} = body;
+
+        const exists = await this.getUserByEmail(email)
+
+        if(exists) {
+            throw ERRORS_M.ALREADY_EXISTS;
+        }
 
         const hashedPassword =  await hashValue(password)
 
@@ -34,42 +44,30 @@ class UserService {
 
         return newUser;
     }
-    async update(body: UpdateUserDto, id: string): Promise<boolean> {
-        try {
-            const {name} = body;
-            const user = await this.getById(id)
-            if(!user) {
-                return false;
-            }else {
-                await user.updateOne({name})
-                return true;
-            }
-        } catch(err) {
-            return false;
+    async update(body: UpdateUserDto, id: string): Promise<void> {
+        const {name} = body;
+        const user = await this.getById(id)
+        if(!user) {
+            throw ERRORS_M.NOT_FOUND;
+        }else {
+            await user.updateOne({name})
         }
-        
     }
-    async delete(id: string): Promise<boolean> {
-        try {
-            const user = await this.getById(id)
-            if(!user) {
-                return false;
-            }else {
-                await user.deleteOne()
-                return true;
-            }
-        } catch(err) {
-            return false;
+    async delete(id: string): Promise<void> {
+        const user = await this.getById(id)
+        if(!user) {
+            throw ERRORS_M.NOT_FOUND;
+        }else {
+            await user.deleteOne()
         }
     }
 
-    async getUserByEmail(email: string): Promise<UserDoc | null> {
-        try {
-            const user = await userModel.User.findOne({email})
-            return user;
-        } catch(err) {
-            return null;
+    async getUserByEmail(email: string): Promise<UserDoc> {
+        const user = await userModel.User.findOne({email})
+        if(!user){
+            throw ERRORS_M.NOT_FOUND;
         }
+        return user;
     }
 
 }

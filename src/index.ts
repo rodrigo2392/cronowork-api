@@ -6,6 +6,7 @@ dotenv.config();
 import { UserRoutes } from './routes/user.routes';
 import { AuthRoutes } from './routes/auth.routes';
 import { CommonRoutes } from './routes/common.routes';
+import { errorHandler } from './middlewares/error.middleware';
 const app = express()
 
 app.use(cors())
@@ -18,11 +19,11 @@ routes.push(new UserRoutes(app));
 routes.push(new AuthRoutes(app));
 
 app.get('/', (req, res) => {
-  res.json({message: "API CRONOWORK V1.1"})
+  res.json({message: "API CRONOWORK V1"})
 })
-app.post('/', (req, res) => {
-    res.json({message: "esta es una ruta post"})
-})
+
+app.use(errorHandler);
+
 app.listen(port, () => {
   routes.map(el => {
     console.log(`Route ${el.getName()}`)
