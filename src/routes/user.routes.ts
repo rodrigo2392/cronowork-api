@@ -4,7 +4,7 @@ import userController from '../controllers/user.controller';
 import { createUserValidation, updateValidation } from '../middlewares/user.middleware';
 import { validateToken } from '../middlewares/auth.middleware';
 
-export class UserRoutes extends CommonRoutes{
+export default class UserRoutes extends CommonRoutes{
     constructor(app: express.Application) {
         super(app, "UserRoutes")
     }

@@ -1,5 +1,7 @@
 import express from 'express'
 import authService from '../services/auth.service';
+import userService from '../services/user.service';
+import { ERRORS_M } from '../dto/error.dto';
 
 class AuthController {
     async login(req: express.Request, res: express.Response) {
@@ -13,7 +15,13 @@ class AuthController {
     }
 
     async register(req: express.Request, res: express.Response) {
-        throw 'not implemented'
+        try {
+            const user = await userService.create(req.body);
+            res.json({user})
+        } catch(err) {
+            console.log(err)
+            res.status(err === ERRORS_M.ALREADY_EXISTS ? 400 : 500).json({message: err})
+        }
     }
 }
 

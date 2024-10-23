@@ -62,11 +62,8 @@ class UserService {
         }
     }
 
-    async getUserByEmail(email: string): Promise<UserDoc> {
+    async getUserByEmail(email: string): Promise<UserDoc | null> {
         const user = await userModel.User.findOne({email})
-        if(!user){
-            throw ERRORS_M.NOT_FOUND;
-        }
         return user;
     }
 

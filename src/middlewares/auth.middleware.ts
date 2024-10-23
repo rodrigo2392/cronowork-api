@@ -8,10 +8,12 @@ export function validateToken(req: express.Request, res: express.Response, next:
             if (authorization[0] !== 'Bearer') {
                 res.status(401).send({ errors: ['Token not found'] });
             } else {
-                res.locals.jwt = jwt.verify(
+                const decoded = jwt.verify(
                     authorization[1],
                     process.env.TOKEN_SECRET
-                ) as Jwt;
+                ) as Jwt&{id: string};
+                res.locals.jwt = decoded;
+                req.headers.user = decoded.id;
                 next();
             }
         } catch (err) {
