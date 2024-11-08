@@ -13,8 +13,8 @@ class ProjectController {
         try {
             const {user} = req.headers;
             const {page, limit} = req.query;
-            const users = await projectService.getAll(parseInt(page as string || ''), parseInt(limit as string || ''), user as string);
-            res.json( users)
+            const projects = await projectService.getAll(parseInt(page as string || ''), parseInt(limit as string || ''), user as string);
+            res.json( projects)
         } catch(err) {
             res.status(500).json({message: err})
         }
@@ -23,8 +23,8 @@ class ProjectController {
     async getById(req: express.Request, res: express.Response): Promise<void> {
         try {
             const {id} = req.params;
-            const user = await projectService.getById(id);
-            res.json({user});
+            const project = await projectService.getById(id);
+            res.json({project});
         }catch(err){
             res.status(err === ERRORS_M.NOT_FOUND ? 404 : 500).json({message: err});
         }
@@ -34,8 +34,8 @@ class ProjectController {
         try {
             const {user} = req.headers;
             req.body.user = user;
-            const client = await projectService.create(req.body);
-            res.json({client})
+            const project = await projectService.create(req.body);
+            res.json({project})
         } catch(err) {
             res.status(err === ERRORS_M.ALREADY_EXISTS ? 400 : 500).json({message: err})
         }

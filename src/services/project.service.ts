@@ -14,12 +14,13 @@ class ClientService {
             collation: {
               locale: 'es',
             },
+            populate: ["client"],
         };
         const clients = await projectModel.Project.paginate({user}, options);
         return clients;
     }
     async getById(id: string): Promise<ProjectDoc> {
-        const client = await projectModel.Project.findById(id);
+        const client = await projectModel.Project.findById(id, null, {populate: ["client"]});
         if(!client) {
             throw ERRORS_M.NOT_FOUND;
         }

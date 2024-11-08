@@ -8,7 +8,7 @@ class AuthController {
         try {
             const {email, password} = req.body;
             const token = await authService.login(email, password)
-            res.json({token})
+            res.json(token)
         }catch(error) {
             res.status(400).json({message: error})
         }
@@ -21,6 +21,16 @@ class AuthController {
         } catch(err) {
             console.log(err)
             res.status(err === ERRORS_M.ALREADY_EXISTS ? 400 : 500).json({message: err})
+        }
+    }
+
+    async refresh_token(req: express.Request, res: express.Response) {
+        try {
+            const {refresh_token } = req.body;
+            const token = await authService.refresh_token(refresh_token)
+            res.json(token)
+        }catch(error) {
+            res.status(400).json({message: error})
         }
     }
 }

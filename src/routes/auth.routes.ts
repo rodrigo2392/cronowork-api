@@ -21,6 +21,10 @@ export default class AuthRoutes extends CommonRoutes{
             authController.register
         )
 
+        router.route("/refresh_token").post(
+            authController.refresh_token
+        )
+
         this.app.use("/auth", router)
         return this.app;
     }
