@@ -5,7 +5,6 @@ import {ERRORS_M} from '../dto/error.dto'
 
 
 class ClientService {
-    
     async getAll(page: number = 1, limit: number = 10, user: string): Promise<PaginateResult<ClientDoc>> {
         const options: PaginateOptions = {
             page,
