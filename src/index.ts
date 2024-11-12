@@ -21,7 +21,7 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-// app.use(limiter)
+app.use(limiter);
 
 app.use(cors());
 app.use(bodyparser.json());
