@@ -4,10 +4,9 @@ import mongoosePaginate from "mongoose-paginate-v2";
 class MongoService {
   private options: ConnectOptions = {
     serverSelectionTimeoutMS: 5000,
-    auth: {
-      username: process.env.MONGO_USER ?? "",
-      password: process.env.MONGO_PASSWORD ?? "",
-    },
+    authSource: "admin",
+    user: process.env.MONGO_USER,
+    pass: process.env.MONGO_PASSWORD,
   };
 
   constructor() {
