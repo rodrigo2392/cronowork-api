@@ -2,6 +2,7 @@ import express from "express";
 import trackService from "../services/track.service";
 import { ERRORS_M, RESPONSE_M } from "../dto/error.dto";
 import { StartTrackDto } from "../dto/track.dto";
+import io from "socket.io";
 
 export interface Query {
   page: number;

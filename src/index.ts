@@ -11,8 +11,15 @@ import ProjectRoutes from "./routes/projects.routes";
 import TrackRoutes from "./routes/track.routes";
 import { CommonRoutes } from "./routes/common.routes";
 import { errorHandler } from "./middlewares/error.middleware";
+import mongoService from "./services/mongo.service";
+import http from "http";
+import SocketService from "./services/socket.service";
 
 const app = express();
+
+const server = http.createServer(app);
+
+new SocketService(server);
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 15 minutes
@@ -22,7 +29,7 @@ const limiter = rateLimit({
 });
 
 app.set("trust proxy", 1);
-app.use(limiter);
+// app.use(limiter);
 
 app.use(cors());
 app.use(bodyparser.json());
@@ -39,12 +46,26 @@ routes.push(new TrackRoutes(app));
 app.get("/", (req, res) => {
   res.json({ message: "API CRONOWORK V1" });
 });
+app.get("/healthcheck", async (_req, res, _next) => {
+  try {
+    const mongoose = mongoService.getMongoose();
+    const healthcheck = {
+      uptime: process.uptime(),
+      status: "OK",
+      timestamp: Date.now(),
+      mongo: mongoose.connection.readyState === 1 ? "OK" : "unknow",
+    };
+    res.status(200).json(healthcheck);
+  } catch (err) {
+    res.status(503).json({ err });
+  }
+});
 
 app.use(errorHandler);
 
-app.listen(port, () => {
+server.listen(port, () => {
   routes.map((el) => {
     console.log(`Route ${el.getName()}`);
   });
-  console.log(`Server on port: ${port}`);
+  console.log(`listening on *:${port}`);
 });
