@@ -9,6 +9,7 @@ import AuthRoutes from "./routes/auth.routes";
 import ClientRoutes from "./routes/client.routes";
 import ProjectRoutes from "./routes/projects.routes";
 import TrackRoutes from "./routes/track.routes";
+import DashboardRoutes from "./routes/dashboard.routes";
 import { CommonRoutes } from "./routes/common.routes";
 import { errorHandler } from "./middlewares/error.middleware";
 import mongoService from "./services/mongo.service";
@@ -42,6 +43,7 @@ routes.push(new AuthRoutes(app));
 routes.push(new ClientRoutes(app));
 routes.push(new ProjectRoutes(app));
 routes.push(new TrackRoutes(app));
+routes.push(new DashboardRoutes(app));
 
 app.get("/", (req, res) => {
   res.json({ message: "API CRONOWORK V1" });
