@@ -15,6 +15,8 @@ import { errorHandler } from "./middlewares/error.middleware";
 import mongoService from "./services/mongo.service";
 import http from "http";
 import SocketService from "./services/socket.service";
+const swaggerUi = require('swagger-ui-express');
+import { swaggerSpec } from './swagger';
 
 const app = express();
 
@@ -31,6 +33,8 @@ const limiter = rateLimit({
 
 app.set("trust proxy", 1);
 // app.use(limiter);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(cors());
 app.use(bodyparser.json());
